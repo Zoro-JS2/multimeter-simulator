@@ -26,9 +26,6 @@
 - [Vite](https://vitejs.dev/) для сборки и разработки
 - SVG для отрисовки мультиметра и стрелки
 
-## 📂 Структура проекта
-multimeter-site/ ├─ src/ │  ├─ components/   # Компоненты мультиметра │  ├─ assets/       # Изображения и иконки │  ├─ App.tsx       # Основное приложение │  └─ main.tsx      # Точка входа ├─ package.json ├─ tsconfig.json └─ vite.config.ts
-
 ## ▶️ Запуск проекта
 ```bash
 # Установка зависимостей
