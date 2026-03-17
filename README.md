@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# Multimeter Simulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Учебный проект на **React + TypeScript**, имитирующий работу цифрового мультиметра.  
+Цель — создать интерактивный сайт, где пользователь может переключать режимы мультиметра и видеть подсказки, показания и ошибки при неправильном подключении щупов.
 
-Currently, two official plugins are available:
+## 🚀 Возможности
+- Визуальный мультиметр с круговым переключателем режимов.
+- Поддержка основных режимов:
+  - OFF (выключено)
+  - V~ (переменное напряжение)
+  - V⎓ (постоянное напряжение)
+  - A (ток)
+  - Ω (сопротивление)
+  - 🔔 (прозвонка)
+- Экран с показаниями (значения выводятся в зависимости от режима).
+- Подключение двух щупов (+ и -) через коннекторы:
+  - COM
+  - VΩmA
+  - 10A
+- Проверка правильности подключения:
+  - Если щупы подключены верно → отображается значение.
+  - Если подключение неверное → выводится ошибка и совет.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Технологии
+- [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/) для сборки и разработки
+- SVG для отрисовки мультиметра и стрелки
 
-## React Compiler
+## 📂 Структура проекта
+multimeter-site/ ├─ src/ │  ├─ components/   # Компоненты мультиметра │  ├─ assets/       # Изображения и иконки │  ├─ App.tsx       # Основное приложение │  └─ main.tsx      # Точка входа ├─ package.json ├─ tsconfig.json └─ vite.config.ts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ▶️ Запуск проекта
+```bash
+# Установка зависимостей
+npm install
 
-## Expanding the ESLint configuration
+# Запуск локального сервера
+npm run dev
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Сборка проекта
+npm run build
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+🌐 Деплой
+Для публикации можно использовать GitHub Pages:
+npm install gh-pages --save-dev
+npm run deploy
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🎯 Цель проекта
+Этот проект создан для обучения и демонстрации принципов работы мультиметра.
+Он может быть полезен студентам, начинающим инженерам и всем, кто хочет лучше понять основы электрических измерений.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ▶️ Запуск проекта
+```bash
+# Установка зависимостей
+npm install
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# Запуск локального сервера
+npm run dev
+
+# Сборка проекта
+npm run build
