@@ -1,0 +1,593 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@500;700&display=swap');
+
+:root {
+  --bg: #0f111a;
+  --surface: #1e212b;
+  --panel-bg: #2a2d39;
+  --accent: #ef233c;
+  --accent-glow: rgba(239, 35, 60, 0.4);
+  --lcd-bg: #8ba888;
+  --lcd-bg-error: #ff7b7b;
+  --lcd-text: #1b262c;
+  --text: #e0e1dd;
+  --text-muted: #778da9;
+  --border: #333644;
+  
+  --dial-base: #1a1c23;
+  --dial-top: #2c2f3b;
+  --dial-indicator: #ef233c;
+  
+  --port-bg: #14151a;
+  --port-border: #3a3d4a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle at 50% 0%, #1e212b 0%, #0f111a 70%);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* changed to flex start so it can scroll if needed */
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 1400px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Typography */
+h1 {
+  font-weight: 800;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, #fff, #aab2c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+/* App Layout */
+.app-main-layout {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.app-header {
+  text-align: center;
+}
+.app-header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-top: -1rem;
+}
+.app-content {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-start;
+  width: 100%;
+}
+@media (max-width: 900px) {
+  .app-content { flex-direction: column; align-items: center; }
+  .workspace-side { width: 100%; }
+}
+
+.multimeter-side {
+  flex: 0 0 420px;
+}
+.workspace-side {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Multimeter Container */
+.multimeter-device {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border);
+}
+
+.multimeter-device::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}
+
+/* LCD Display */
+.lcd-screen {
+  background: var(--lcd-bg);
+  width: 100%;
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  box-shadow: 
+    inset 0 4px 10px rgba(0, 0, 0, 0.5),
+    0 2px 0 rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background-color 0.3s ease;
+  overflow: hidden;
+  min-height: 90px;
+}
+
+.lcd-screen.error {
+  background: var(--lcd-bg-error);
+}
+
+.lcd-screen::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+  pointer-events: none;
+}
+
+.lcd-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--lcd-text);
+  text-shadow: 0 0 8px rgba(27, 38, 44, 0.3);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+/* Dial Section */
+.dial-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: var(--panel-bg);
+  box-shadow: 
+    inset 0 8px 16px rgba(0,0,0,0.4),
+    0 2px 4px rgba(255,255,255,0.05);
+  margin-top: 1rem;
+}
+
+.dial-labels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dial-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: center center;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  transition: color 0.2s, text-shadow 0.2s, transform 0.2s;
+  pointer-events: auto;
+  cursor: pointer;
+  padding: 10px; /* enlarge click area */
+  user-select: none;
+  background: transparent;
+}
+
+.dial-label.active {
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  font-weight: 800;
+}
+
+.dial-knob {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--dial-top), var(--dial-base));
+  box-shadow: 
+    0 10px 20px rgba(0,0,0,0.5),
+    inset 0 2px 2px rgba(255,255,255,0.1),
+    inset 0 -2px 5px rgba(0,0,0,0.5);
+  position: relative;
+  cursor: grab;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  justify-content: center;
+  border: 4px solid var(--border);
+}
+
+.dial-knob:active {
+  cursor: grabbing;
+}
+
+.dial-indicator {
+  position: absolute;
+  top: 15px;
+  width: 6px;
+  height: 35px;
+  background: var(--dial-indicator);
+  border-radius: 3px;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Ports */
+.ports-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  background: var(--panel-bg);
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.port-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.port-group h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ports-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.port-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.port-label span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.port-label:hover span {
+  color: white;
+}
+
+.port-input {
+  display: none;
+}
+
+.port-hole {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--port-bg);
+  border: 3px solid var(--port-border);
+  box-shadow: 
+    inset 0 5px 10px rgba(0,0,0,0.9),
+    0 2px 4px rgba(255,255,255,0.05);
+  position: relative;
+  transition: all 0.2s;
+}
+
+.port-input:checked + .port-hole {
+  border-color: var(--accent);
+  box-shadow: 
+    inset 0 5px 10px rgba(0,0,0,0.9),
+    0 0 15px var(--accent-glow);
+}
+
+.port-input:checked + .port-hole::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.4);
+}
+
+.port-input.black-probe:checked + .port-hole {
+  border-color: #555;
+  box-shadow: inset 0 5px 10px rgba(0,0,0,0.9);
+}
+.port-input.black-probe:checked + .port-hole::after {
+  background: #222;
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.8);
+}
+
+/* Messages */
+.hint-message {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  min-height: 22px;
+}
+
+.error-message {
+  color: var(--accent);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: -1rem;
+  background: rgba(239, 35, 60, 0.1);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 35, 60, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+
+/* Workspace */
+.workspace-container {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+}
+
+.workspace-container h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+.test-objects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.test-object {
+  background: var(--panel-bg);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid var(--port-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.test-object h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Dropzones */
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  z-index: 10;
+}
+.dropzone-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.dropzone-pockets {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--port-bg);
+  border: 3px solid var(--port-border);
+  box-shadow: inset 0 5px 10px rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+  position: relative;
+}
+.dropzone.drag-over .dropzone-pockets {
+  border-color: var(--accent);
+  box-shadow: inset 0 5px 10px rgba(0,0,0,0.9), 0 0 15px var(--accent-glow);
+}
+.dropzone .empty-hole {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #111;
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.8);
+}
+.dz-small .dropzone-pockets {
+  width: 32px; height: 32px;
+  border-width: 2px;
+}
+.dz-small .empty-hole {
+  width: 14px; height: 14px;
+}
+
+/* Probes */
+.probe-tip {
+  width: 12px;
+  height: 38px;
+  border-radius: 4px;
+  cursor: grab;
+  position: absolute; /* position over the dropzone center */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  z-index: 20;
+}
+.probe-tip:active {
+  cursor: grabbing;
+}
+.probe-metal {
+  width: 4px;
+  height: 12px;
+  background: linear-gradient(90deg, #d4d4d4, #f5f5f5, #a3a3a3);
+  position: absolute;
+  top: -12px;
+  border-radius: 2px 2px 0 0;
+}
+.probe-tip.red { background: #ef233c; }
+.probe-tip.black { background: #2b2d42; border: 1px solid #14141a; }
+
+/* In a dropzone, probes stack slightly offset if multiples */
+.dropzone-pockets > .probe-tip:first-child { transform: translate(-2px, -8px) rotate(-10deg); }
+.dropzone-pockets > .probe-tip:nth-child(2) { transform: translate(2px, -8px) rotate(10deg); }
+
+/* Objects Styling */
+.drops-row {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.battery-body {
+  width: 80px;
+  height: 140px;
+  background: linear-gradient(180deg, #ffd166 20%, #118ab2 20%);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  box-shadow: inset -5px 0 15px rgba(0,0,0,0.3);
+}
+.battery-label { font-weight: 800; color: white; font-size: 1.2rem; margin: auto 0; }
+
+.resistor-body {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.resistor-stripes {
+  width: 60px;
+  height: 20px;
+  background: #e07a5f;
+  border-radius: 10px;
+  background-image: repeating-linear-gradient(90deg, transparent, transparent 10px, #3d405b 10px, #3d405b 15px);
+}
+
+.wire-body {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.wire-line {
+  width: 60px;
+  height: 6px;
+  background: #e0e1dd;
+  border-radius: 3px;
+}
+
+.circuit-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.circuit-wire {
+  width: 4px; height: 30px; background: #e0e1dd;
+}
+.circuit-bat {
+  background: #333; padding: 4px 12px; border-radius: 4px; font-size: 0.8rem;
+}
+.circuit-bulb {
+  font-size: 2rem;
+  background: #222;
+  border-radius: 50%;
+  padding: 5px;
+}
+.circuit-break {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.break-gap {
+  font-size: 0.7rem; color: var(--accent); white-space: nowrap;
+}
+
+/* Dock */
+.probes-dock {
+  margin-top: auto;
+  padding: 1.5rem;
+  background: rgba(0,0,0,0.2);
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s;
+}
+.probes-dock:hover {
+  border-color: rgba(255,255,255,0.2);
+}
+.dock-title {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.dock-slots {
+  display: flex;
+  gap: 3rem;
+  height: 60px;
+}
+.dock-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 50px;
+  position: relative;
+}
+.slot-label { font-size: 0.8rem; color: #555; font-weight: bold; }
+.dock-slot .probe-tip {
+  position: relative; /* override absolute from above */
+  transform: none !important;
+}
